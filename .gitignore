@@ -1,0 +1,8 @@
+doc/
+*.o
+moc_*
+ui_*
+*.pro.user*
+Makefile
+myscada
+
