@@ -2,6 +2,12 @@
 
 #include <stdio.h>
 #include <seri.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
+
+
+
 
 typedef struct{
   int type;
@@ -38,15 +44,33 @@ int send_data(const unsigned char *data, int len){
   return 0;
 }
 
+int recv_data(unsigned char *data, int* len){
+  int i;
+  sleep(1);
+  *len=random()%*len;
+  for(i=0;i<*len;i++){
+    data[i]=random()%0xff;
+  }
+  return *len;
+}
+
 int main(void){
   seri_init();
 
-  char buf[100];
-  send_data(buf, 35);
-  //seri_device dev;
+  //* Recv, send test..
+  struct timespec t; clock_gettime(CLOCK_MONOTONIC_RAW, &t);
+  srandom(t.tv_nsec);
+  unsigned char buf[100];
+  int l=sizeof(buf);
+  recv_data(buf, &l);
+  send_data(buf, l);
+  // */
+
+   /*
+  seri_device dev;
   //seri_proto  proto;
 
-  //seri_open_port(PORT_SELF, send_data, recive_data);
+  dev = seri_open_port(PORT_SELF, send_data, recive_data);
   /*
   proto = seri_proto_create(PROT_MODBUS);
   seri_proto_port(NULL)
