@@ -3,6 +3,5 @@ doc/
 moc_*
 ui_*
 *.pro.user*
-Makefile
 myscada
 
