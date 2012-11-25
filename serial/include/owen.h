@@ -21,6 +21,9 @@
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
+#include <stdint.h>
+
+#define MAXPHYSIZE ((1+1+1+2+15+2+1+1)*2)
 //////////////// PHYSICAL LAYER ///////////////////
 enum{ //OWEN_DEV
   OWEN_DEV_UNKNOWN,
@@ -53,6 +56,33 @@ int owen_device_phy_transmit(OwenDevice* device, char* buff, int buffsize, char*
 int owen_device_close(OwenDevice* od);
 
 /////////////// DATA-LINK LEYER //////////////////////
+#pragma pack(1)
+typedef struct S_owen_datalink{
+  uint8_t addr;
+  uint8_t eaddr:4;
+  uint8_t remote:1;
+  uint8_t size:3;
+  uint8_t buff[20];
+  uint16_t crc;
+} OwenDatalink;
+#pragma pack()
+
+
+/* Создать пакет канальго уровня */
+OwenDatalink* owen_datalink_new();
+
+/* Отправить пакет на уровень ниже */
+int owen_device_datalink_transmit(OwenDevice* device, OwenDatalink* out, OwenDatalink* input);
+
+/* Получить результирующий пакет для физического уровня из OwenDatalink. */
+int owen_datalink_getpackage(OwenDatalink* device, char* buff, int *resultsize);
+
+/* Пропарсить пакет физического уровня и записать в OwenDetalink. */
+int owen_datalink_setpackage(OwenDatalink* device, char* buff, int resultsize);
+
+/* Удалить пакет канального уровня */
+int owen_datalink_free(OwenDatalink* od);
+
 
 /////////////// PRESENTATION LAYER ///////////////////
 
