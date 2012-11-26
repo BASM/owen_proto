@@ -34,6 +34,37 @@
 
 #include "owen.h"
 
+static int print_hexdump(char* tab, unsigned char* buff, int size)
+{
+	int i;
+	for(i=0; i<size; i++){
+		if(((i%16)==0)){
+			printf("\n%s%4.4x ", tab, i);
+		}
+		printf("%2.2x ", buff[i]);
+	}
+  printf("\n");
+  return 0;
+}
+
+int owen_datalink_printpackage(OwenDatalink* od)
+{
+  printf("Package:\n");
+  printf("\tAddres  : %x\n", od->addr);
+  printf("\t     +  : %x\n", od->eaddr);
+  printf("\tRemote  : %x\n", od->remote);
+  printf("\tSize    : %x\n", od->size);
+  printf("\tHash    : %x%x\n", od->buff[0], od->buff[1]);
+  if(od->size>0){
+    printf("\tData:");
+    print_hexdump("\t\t", od->buff+2, od->size);
+  }
+  printf("\tCRC     : %x\n", od->crc);
+
+  return 0;
+}
+
+
 OwenDatalink* owen_datalink_new()
 {
   OwenDatalink* od=calloc(sizeof(OwenDatalink), 1);

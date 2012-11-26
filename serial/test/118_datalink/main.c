@@ -10,7 +10,6 @@
 #include "owen.h"
 int hexdump(unsigned char* buff, int size)
 {
-	printf("Buff size: %i\n", size);
 	int i;
 	for(i=0; i<size; i++){
 		if(((i%16)==0)){
@@ -21,8 +20,6 @@ int hexdump(unsigned char* buff, int size)
   printf("\n");
   return 0;
 }
-
-
 
 int main(void)
 {
@@ -41,6 +38,9 @@ int main(void)
     printf("parsing error!\n");//: %i\n", res);
     return 1;
   }
+  owen_datalink_printpackage(odl);
+  printf("Send layer:\n");
+	hexdump(odl->buff, odl->size+2);
   int size=sizeof(result);
   printf("Try generate etanol package..\n");
   res = owen_datalink_getpackage(odl, result, &size);
@@ -72,6 +72,7 @@ int main(void)
   owen_device_datalink_transmit(dev, odl, od_result);
   printf("Result:\n");
 	hexdump(od_result->buff, od_result->size+2);
+  owen_datalink_printpackage(od_result);
 
   owen_datalink_free(odl);
   owen_datalink_free(od_result);

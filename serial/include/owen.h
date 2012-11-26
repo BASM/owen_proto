@@ -83,7 +83,13 @@ int owen_datalink_setpackage(OwenDatalink* device, char* buff, int resultsize);
 /* Удалить пакет канального уровня */
 int owen_datalink_free(OwenDatalink* od);
 
+/* Отладочная функция.
+ *  Печатает в stdout информацию по пакету
+ */
+int owen_datalink_printpackage(OwenDatalink* od);
 
 /////////////// PRESENTATION LAYER ///////////////////
+
+
 
 /////////////// APPLICATION LAYER ////////////////////
