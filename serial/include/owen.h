@@ -62,7 +62,8 @@ typedef struct S_owen_datalink{
   uint8_t eaddr:4;
   uint8_t remote:1;
   uint8_t size:3;
-  uint8_t buff[20];
+  uint8_t hash[2];
+  uint8_t data[15];
   uint16_t crc;
 } OwenDatalink;
 #pragma pack()

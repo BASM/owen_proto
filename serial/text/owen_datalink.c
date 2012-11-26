@@ -54,10 +54,10 @@ int owen_datalink_printpackage(OwenDatalink* od)
   printf("\t     +  : %x\n", od->eaddr);
   printf("\tRemote  : %x\n", od->remote);
   printf("\tSize    : %x\n", od->size);
-  printf("\tHash    : %x%x\n", od->buff[0], od->buff[1]);
+  printf("\tHash    : %x%x\n", od->hash[0], od->hash[1]);
   if(od->size>0){
     printf("\tData:");
-    print_hexdump("\t\t", od->buff+2, od->size);
+    print_hexdump("\t\t", od->data, od->size);
   }
   printf("\tCRC     : %x\n", od->crc);
 
@@ -130,7 +130,8 @@ int owen_datalink_setpackage(OwenDatalink* od, char* buff, int resultsize)
   od->eaddr=decode[1]>>5;//FIXME add 
   od->remote=(decode[1]>>4)&1;
   od->size=decode[1]&0x0F;
-  memcpy(od->buff, &decode[2], 2+od->size);
+  memcpy(od->hash, &decode[2], 2);
+  memcpy(od->data, &decode[4], od->size);
   od->crc=origcrc;
   return 0;
 }

@@ -40,7 +40,7 @@ int main(void)
   }
   owen_datalink_printpackage(odl);
   printf("Send layer:\n");
-	hexdump(odl->buff, odl->size+2);
+	hexdump(odl->hash, odl->size+2);
   int size=sizeof(result);
   printf("Try generate etanol package..\n");
   res = owen_datalink_getpackage(odl, result, &size);
@@ -71,7 +71,7 @@ int main(void)
   OwenDatalink* od_result = owen_datalink_new();
   owen_device_datalink_transmit(dev, odl, od_result);
   printf("Result:\n");
-	hexdump(od_result->buff, od_result->size+2);
+	hexdump(od_result->hash, od_result->size+2);
   owen_datalink_printpackage(od_result);
 
   owen_datalink_free(odl);
