@@ -46,8 +46,6 @@ static int print_hexdump(char* tab, unsigned char* buff, int size)
   printf("\n");
   return 0;
 }
-#define MOTOW(a) ({ ((a>>8)|(a<<8))&0xFFFF; })
-
 int owen_datalink_printpackage(OwenDatalink* od)
 {
   printf("Package:\n");
@@ -81,18 +79,6 @@ enum {
   OWEN_DL_ERRTRANSMIT=5,//
 };
 
-unsigned int Hash(uint8_t Byte, char nbit, unsigned int CRC)
-{
-  int i;
-  for(i=0; i< nbit; i++, Byte <<=1) {
-    if( (Byte^(CRC>>8))&0x80){
-      CRC <<= 1; CRC ^= 0x8F57;
-    }else
-      CRC <<=1;
-  }
-  return CRC;
-}
-
 int owen_datalink_setpackage(OwenDatalink* od, char* buff, int resultsize)
 {
   if((buff[0]!=0x23) || (buff[resultsize-1]!=0x0d))
@@ -120,7 +106,7 @@ int owen_datalink_setpackage(OwenDatalink* od, char* buff, int resultsize)
     int i;
     unsigned int hash=0;
     for(i=0;i<decsize-2;i++){
-      hash = Hash(decode[i], 8, hash);
+      hash = owen_hash(decode[i], 8, hash);
     }
     origcrc =decode[decsize-1] | decode[decsize-2]<<8;
     if(origcrc!=(hash&0xffff)){
@@ -164,7 +150,7 @@ int owen_datalink_getpackage(OwenDatalink* od, char* buff, int *resultsize)
     }else{
       a=bf[i]>>  4 ;
       b=bf[i]& 0x0F;
-      hash = Hash(bf[i], 8, hash);
+      hash = owen_hash(bf[i], 8, hash);
     }
     buff[size++]=a+'G';
     buff[size++]=b+'G';

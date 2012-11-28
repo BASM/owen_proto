@@ -24,6 +24,11 @@
 #include <stdint.h>
 
 #define MAXPHYSIZE ((1+1+1+2+15+2+1+1)*2)
+
+//// UTILS
+unsigned int owen_hash(uint8_t Byte, char nbit, unsigned int CRC);
+
+
 //////////////// PHYSICAL LAYER ///////////////////
 enum{ //OWEN_DEV
   OWEN_DEV_UNKNOWN,
@@ -56,6 +61,11 @@ int owen_device_phy_transmit(OwenDevice* device, char* buff, int buffsize, char*
 int owen_device_close(OwenDevice* od);
 
 /////////////// DATA-LINK LEYER //////////////////////
+// Перевернуть слово
+//  используется для перевода hash в правильное состояние.
+//  FIXME: работает только на little endian
+#define MOTOW(a) ({ ((a>>8)|(a<<8))&0xFFFF; })
+
 #pragma pack(1)
 typedef struct S_owen_datalink{
   uint8_t addr;
