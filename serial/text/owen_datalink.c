@@ -46,6 +46,7 @@ static int print_hexdump(char* tab, unsigned char* buff, int size)
   printf("\n");
   return 0;
 }
+#define MOTOW(a) ({ ((a>>8)|(a<<8))&0xFFFF; })
 
 int owen_datalink_printpackage(OwenDatalink* od)
 {
@@ -54,7 +55,7 @@ int owen_datalink_printpackage(OwenDatalink* od)
   printf("\t     +  : %x\n", od->eaddr);
   printf("\tRemote  : %x\n", od->remote);
   printf("\tSize    : %x\n", od->size);
-  printf("\tHash    : %x%x\n", od->hash[0], od->hash[1]);
+  printf("\tHash    : %x (LE: %x)\n", od->hash, MOTOW(od->hash));
   if(od->size>0){
     printf("\tData:");
     print_hexdump("\t\t", od->data, od->size);
@@ -130,7 +131,8 @@ int owen_datalink_setpackage(OwenDatalink* od, char* buff, int resultsize)
   od->eaddr=decode[1]>>5;//FIXME add 
   od->remote=(decode[1]>>4)&1;
   od->size=decode[1]&0x0F;
-  memcpy(od->hash, &decode[2], 2);
+  char* hash=(char*)&od->hash;
+  memcpy(&od->hash, &decode[2], 2);
   memcpy(od->data, &decode[4], od->size);
   od->crc=origcrc;
   return 0;
