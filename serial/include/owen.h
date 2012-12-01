@@ -101,6 +101,18 @@ int owen_datalink_printpackage(OwenDatalink* od);
 
 /////////////// PRESENTATION LAYER ///////////////////
 
+/* Посчитать HASH из имени параметра */
+uint16_t owen_hashstr(char* parm);
 
+/* Получить имя параметра из HASH */
+char* owen_strhash(int hash);
+
+/* Получить данные в пакете представленные в Float виде*/
+float owen_isFloat(OwenDatalink* od);
+
+/* Получить данные в пакете представленные в Integer виде*/
+int owen_isInt(OwenDatalink* od);
 
 /////////////// APPLICATION LAYER ////////////////////
+
+

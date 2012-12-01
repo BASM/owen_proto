@@ -37,12 +37,21 @@
 static int print_hexdump(char* tab, unsigned char* buff, int size)
 {
 	int i;
+  char str[17]={'\0'};
 	for(i=0; i<size; i++){
 		if(((i%16)==0)){
+      if(str[0] != '\0')
+        printf(" %s", str);
+      memset(str, '\0', 17);
 			printf("\n%s%4.4x ", tab, i);
 		}
+    if( (buff[i]>=0x20) && (buff[i]<=0x7e) )
+      str[i%16]=buff[i];
+    else
+      str[i%16]='.';
 		printf("%2.2x ", buff[i]);
 	}
+  printf(" %s", str);
   printf("\n");
   return 0;
 }
