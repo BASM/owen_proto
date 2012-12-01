@@ -1,0 +1,14 @@
+{
+  "vendor": "OWEN",
+  "devices": [
+    "TPM200"
+    ],
+  "verions": [
+    "V02.00xx"
+    ],
+  "protocols": [
+    "OWEN": {
+      "PV": "F24"
+    }
+  ]
+}
