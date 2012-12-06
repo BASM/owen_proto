@@ -60,7 +60,7 @@ int main(void)
   od->hash=owen_hashstr("PV");
 
   OwenDevice* dev = owen_device_open("/dev/ttyUSB0", OWEN_DEV_USBAC4);
-  if(dev<0){
+  if(dev==NULL){
     perror("Error to open device");
     return 1;
   }
