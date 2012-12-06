@@ -62,10 +62,40 @@ int owen_free(char* dev){
   return 0;
 }
 
+typedef struct {
+  int id;
+  char vendor[100];
+  char name[100];
+} ProtoDevices;
+  
+ProtoDevices* proto_get_listsupportdevices(int *size){
+
+  *size=2;
+  ProtoDevices *devs=calloc(sizeof(ProtoDevices),*size);
+
+  int x=*size;
+  while(x--){
+    sprintf(devs[x].name, "Name is %i", x);
+    sprintf(devs[x].vendor, "Vendor is %i", x);
+    printf("%x:%x\n", x,x);
+    devs[x].id=x;
+  }
+
+  return devs;
+}
 
 int main(void)
 {
   printf("Proto APPLICATION LAYER\n");
+
+  int size;
+  ProtoDevices* devs = proto  _get_listSupportDevices(&size);
+
+  ProtoDevices* t=devs;
+  while(size--){
+    printf("Vendor: %s\n", t[size].vendor);
+    printf("Name  : %s\n", t[size].name);
+  }
   /*
   char *devices = owen_M_get_listsupportdevices();
 
@@ -80,8 +110,8 @@ int main(void)
     device+=sizeof(device)+1;
   };
 
-  owen_free(devices);
-   */
+  */
+//  proto_freedevs(devs);
 
   return 0;
 }
