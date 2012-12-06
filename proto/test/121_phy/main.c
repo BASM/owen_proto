@@ -27,7 +27,7 @@ int main(void)
   printf("Hello\n");
 
   OwenDevice* od = owen_device_open("/dev/ttyUSB0", OWEN_DEV_USBAC4);
-  if(od<0){
+  if(od==NULL){
     perror("Error to open device");
     return 1;
   }
