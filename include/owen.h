@@ -27,8 +27,8 @@
  */
 #include <stdint.h>
 
-/** 
- * \brief Макс. размер чего-то там. 
+/**
+ * \brief Макс. размер посылки в пакете owen.
  */
 #define MAXPHYSIZE ((1+1+1+2+15+2+1+1)*2)
 
@@ -74,7 +74,7 @@ int owen_device_close(OwenDevice* od);
 /**
  * \brief Перевернуть слово.
  * Используется для перевода hash в правильное состояние.
- * \bug Работает только на little endian.
+ * \todo Нужно обозначить пустым маркосом на big endian.
  */
 #define MOTOW(a) ({ ((a>>8)|(a<<8))&0xFFFF; })
 
