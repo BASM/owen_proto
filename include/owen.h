@@ -1,8 +1,12 @@
-/*
- * owen.h  - Interface for OWEN protocol
- * Creation Date: 2012-11-25
+/**
+ * \file  owen.h
+ * \brief Interface for OWEN protocol
+ * \date  2012-11-25
  *
- * Copyright (C) 2012 Leonid Myravjev (asm@asm.pp.ru)
+ * \author Leonid Myravjev <asm@asm.pp.ru>
+ * \copyright GNU Public License
+ *
+ * \section LICENSE
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
@@ -23,6 +27,9 @@
  */
 #include <stdint.h>
 
+/** 
+ * \brief Макс. размер чего-то там. 
+ */
 #define MAXPHYSIZE ((1+1+1+2+15+2+1+1)*2)
 
 //// UTILS
@@ -30,10 +37,13 @@ unsigned int owen_hash(uint8_t Byte, char nbit, unsigned int CRC);
 
 
 //////////////// PHYSICAL LAYER ///////////////////
-enum{ //OWEN_DEV
-  OWEN_DEV_UNKNOWN,
-  OWEN_DEV_AUTO,
-  OWEN_DEV_USBAC4,
+/**
+ * \brief Устройства.
+ */
+enum {
+  OWEN_DEV_UNKNOWN, /**< Неизвестное устройство. */
+  OWEN_DEV_AUTO,    /**< Автоматическое определение устройства. */
+  OWEN_DEV_USBAC4,  /**< Устройство USB AC4.     */
 };
 
 typedef struct S_owen_device{
@@ -42,28 +52,30 @@ typedef struct S_owen_device{
   char* name;
 } OwenDevice;
 
-/* Открыть OWEN устройство */
+/** Открыть OWEN устройство */
 OwenDevice* owen_device_open(char* device, int type);
 
-/* Послать данные канального уровня
- * * device -- устройство
- * * buff -- данные
- * * result -- массив для результата
- * * size -- размер массива для результата
+/** Послать данные канального уровня
+ * \param  device -- устройство
+ * \param  buff -- данные
+ * \param  result -- массив для результата
+ * \param  size -- размер массива для результата
  *    принимает максимальный размер массива, result
  *    возвращает размер ответа
  *
- * RETURN: всегда 0
+ * \return  всегда 0
  */
 int owen_device_phy_transmit(OwenDevice* device, char* buff, int buffsize, char* result, int *resultsize);
 
-/* Закрыть OWEN устройство */
+/** Закрыть OWEN устройство */
 int owen_device_close(OwenDevice* od);
 
 /////////////// DATA-LINK LEYER //////////////////////
-// Перевернуть слово
-//  используется для перевода hash в правильное состояние.
-//  FIXME: работает только на little endian
+/**
+ * \brief Перевернуть слово.
+ * Используется для перевода hash в правильное состояние.
+ * \bug Работает только на little endian.
+ */
 #define MOTOW(a) ({ ((a>>8)|(a<<8))&0xFFFF; })
 
 #pragma pack(1)
@@ -79,38 +91,71 @@ typedef struct S_owen_datalink{
 #pragma pack()
 
 
-/* Создать пакет канальго уровня */
+/**
+ * \brief Создать пакет канальго уровня. */
 OwenDatalink* owen_datalink_new();
 
-/* Отправить пакет на уровень ниже */
+/** 
+ * \brief Отправить пакет на уровень ниже.
+ * \param device
+ * \param out
+ * \param input
+ */
 int owen_device_datalink_transmit(OwenDevice* device, OwenDatalink* out, OwenDatalink* input);
 
-/* Получить результирующий пакет для физического уровня из OwenDatalink. */
+/** 
+ * \brief Получить результирующий пакет для физического уровня из OwenDatalink. 
+ * \param device
+ * \param buff
+ * \param resultsize
+ */
 int owen_datalink_getpackage(OwenDatalink* device, char* buff, int *resultsize);
 
-/* Пропарсить пакет физического уровня и записать в OwenDetalink. */
+/** 
+ * \brief Пропарсить пакет физического уровня и записать в OwenDetalink.
+ * \param device
+ * \param buff
+ * \param resultsize
+ */
 int owen_datalink_setpackage(OwenDatalink* device, char* buff, int resultsize);
 
-/* Удалить пакет канального уровня */
+/** 
+ * \brief Удалить пакет канального уровня.
+ * \param od
+ */
 int owen_datalink_free(OwenDatalink* od);
 
-/* Отладочная функция.
- *  Печатает в stdout информацию по пакету
+/**
+ * \brief Отладочная функция.
+ * \detailed Печатает в stdout информацию по пакету.
+ * \param od
  */
 int owen_datalink_printpackage(OwenDatalink* od);
 
 /////////////// PRESENTATION LAYER ///////////////////
 
-/* Посчитать HASH из имени параметра */
+/** 
+ * \brief Посчитать HASH из имени параметра.
+ * \param parm
+ */
 uint16_t owen_hashstr(char* parm);
 
-/* Получить имя параметра из HASH */
+/**
+ * \brief Получить имя параметра из HASH.
+ * \param hash
+ */
 char* owen_strhash(int hash);
 
-/* Получить данные в пакете представленные в Float виде*/
+/**
+ * \brief Получить данные в пакете представленные в Float виде.
+ * \param od
+ */
 float owen_isFloat(OwenDatalink* od);
 
-/* Получить данные в пакете представленные в Integer виде*/
+/** 
+ * \brief Получить данные в пакете представленные в Integer виде.
+ * \param od
+ */
 int owen_isInt(OwenDatalink* od);
 
 /////////////// APPLICATION LAYER ////////////////////
