@@ -77,3 +77,4 @@ For linking use:
 
 For running test you need have AC-4 adaptor (USB->RS-484) from /dev/ttyUSB0
 device, or you need fix test/*/main.c files.
+
